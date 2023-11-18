@@ -25,12 +25,11 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name: Build & push Docker image
-        uses: mr-smithers-excellent/docker-build-push@v5
-        with:
-          image: rajachoda123/github-actions
-          tags: latest
-          registry: docker.io
-          dockerfile: Dockerfile
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build Docker Image
+        run: docker build -t rajachoda123/github-actions:latest .
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Push to Docker Hub
+        run: docker push rajachoda123/github-actions:latest
